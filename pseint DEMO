@@ -1,0 +1,90 @@
+Algoritmo NEXUSPP
+	
+	// CLAVESxD
+	Definir nombreE, contraseñaE, nombreT, contraseñaT Como Cadena
+	
+	// DATOS DE INGRESO
+	Definir info1, info2 Como Cadena
+	Definir decision, opcion Como Entero
+	
+	Escribir "======== MENU DE SELECCION =========="
+	Escribir "Ingrese su rango"
+	Escribir "1- Estudiante"
+	Escribir "2- Tutor"
+	Leer decision
+	
+	nombreE <- "estudiante"
+	contraseñaE <- "1234"
+	
+	nombreT <- "tutor"
+	contraseñaT <- "4321"
+	
+	Segun decision Hacer
+		
+		1:
+			Escribir "======== MENU ESTUDIANTE ========="
+			Escribir "Ingrese su usuario"
+			Leer info1
+			Escribir "Ingrese su contraseña"
+			Leer info2
+			
+			Si info1 = nombreE Y info2 = contraseñaE Entonces
+				
+				Escribir "ACCESO PERMITIDO"
+				
+				// MENU ESTUDIANTE
+				Escribir ""
+				Escribir "===== PANEL ESTUDIANTE ====="
+				Escribir "1. Buscar tutor"
+				Escribir "2. Ver horarios"
+				Escribir "3. Salir"
+				Leer opcion
+				
+				Segun opcion Hacer
+					1:
+						Escribir "Mostrando tutores disponibles..."
+					2:
+						Escribir "Mostrando horarios..."
+					3:
+						Escribir "Sesion finalizada"
+				FinSegun
+				
+			SiNo
+				Escribir "ACCESO DENEGADO"
+			FinSi
+			
+		2:
+			Escribir "======== MENU TUTOR ========="
+			Escribir "Ingrese su usuario"
+			Leer info1
+			Escribir "Ingrese su contraseña"
+			Leer info2
+			
+			Si info1 = nombreT Y info2 = contraseñaT Entonces
+				
+				Escribir "ACCESO PERMITIDO"
+				
+				// MENU TUTOR
+				Escribir ""
+				Escribir "===== PANEL TUTOR ====="
+				Escribir "1. Registrar materia"
+				Escribir "2. Registrar horario"
+				Escribir "3. Ver estudiantes"
+				Leer opcion
+				
+				Segun opcion Hacer
+					1:
+						Escribir "Registro de materia"
+					2:
+						Escribir "Registro de horario"
+					3:
+						Escribir "Lista de estudiantes"
+				FinSegun
+				
+			SiNo
+				Escribir "ACCESO DENEGADO"
+			FinSi
+			
+	FinSegun
+	
+FinAlgoritmo
