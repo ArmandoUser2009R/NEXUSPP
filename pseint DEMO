@@ -1,17 +1,56 @@
 Algoritmo NEXUSPP
 	
-	// CLAVESxD
+	// ===================== CATALOGOS FIJOS (para el menu Segun) =====================
+	
+	Definir Materias Como Cadena
+	Dimension Materias[5]
+	Definir Horarios Como Cadena
+	Dimension Horarios[10]
+	Definir Modalidades Como Cadena
+	Dimension Modalidades[2]
+	
+	// ===================== CLAVES DE ACCESO =====================
+	
 	Definir nombreE, contraseñaE, nombreT, contraseñaT Como Cadena
 	
-	// DATOS DE INGRESO
-	Definir info1, info2 Como Cadena
-	Definir decision, opcion Como Entero
+	// ===================== DATOS DE TUTORES =====================
 	
-	Escribir "======== MENU DE SELECCION =========="
-	Escribir "Ingrese su rango"
-	Escribir "1- Estudiante"
-	Escribir "2- Tutor"
-	Leer decision
+	Definir NomT Como Cadena
+	Definir MatT, HorT, ModT Como Entero
+	Definir CosT Como Real
+	Dimension NomT[20], MatT[20], HorT[20], ModT[20], CosT[20]
+	
+	// ===================== DATOS DE ESTUDIANTES =====================
+	
+	Definir NomE Como Cadena
+	Definir MatE, HorE, ModE Como Entero
+	Definir PreE Como Real
+	Dimension NomE[20], MatE[20], HorE[20], ModE[20], PreE[20]
+	
+	Definir numT, numE, decision Como Entero
+	
+	numT <- 0
+	numE <- 0
+	
+	Materias[1] <- "Matematicas"
+	Materias[2] <- "Fisica"
+	Materias[3] <- "Quimica"
+	Materias[4] <- "Programacion"
+	Materias[5] <- "Ingles"
+	
+	Horarios[1] <- "Lunes-Manana"
+	Horarios[2] <- "Lunes-Tarde"
+	Horarios[3] <- "Martes-Manana"
+	Horarios[4] <- "Martes-Tarde"
+	Horarios[5] <- "Miercoles-Manana"
+	Horarios[6] <- "Miercoles-Tarde"
+	Horarios[7] <- "Jueves-Manana"
+	Horarios[8] <- "Jueves-Tarde"
+	Horarios[9] <- "Viernes-Manana"
+	Horarios[10] <- "Viernes-Tarde"
+	
+	Modalidades[1] <- "Virtual"
+	Modalidades[2] <- "Presencial"
 	
 	nombreE <- "estudiante"
 	contraseñaE <- "1234"
@@ -19,72 +58,519 @@ Algoritmo NEXUSPP
 	nombreT <- "tutor"
 	contraseñaT <- "4321"
 	
-	Segun decision Hacer
+	// Carga 10 tutores y 10 estudiantes de prueba
+	CargarDatosIniciales(NomT, MatT, HorT, ModT, CosT, numT, NomE, MatE, HorE, ModE, PreE, numE)
+	
+	// ===================== MENU DE SELECCION (login) =====================
+	
+	Repetir
 		
-		1:
-			Escribir "======== MENU ESTUDIANTE ========="
-			Escribir "Ingrese su usuario"
-			Leer info1
-			Escribir "Ingrese su contraseña"
-			Leer info2
+		Escribir ""
+		Escribir "======== MENU DE SELECCION =========="
+		Escribir "1. Estudiante"
+		Escribir "2. Tutor"
+		Escribir "0. Salir"
+		
+		decision <- PedirOpcionRango("Ingrese su rango: ", 0, 2)
+		
+		Segun decision Hacer
 			
-			Si info1 = nombreE Y info2 = contraseñaE Entonces
+			1:
+				SesionEstudiante(nombreE, contraseñaE, NomE, MatE, HorE, ModE, PreE, numE, NomT, MatT, HorT, ModT, CosT, numT, Materias, Horarios, Modalidades)
 				
-				Escribir "ACCESO PERMITIDO"
+			2:
+				SesionTutor(nombreT, contraseñaT, NomT, MatT, HorT, ModT, CosT, numT, NomE, MatE, HorE, ModE, PreE, numE, Materias, Horarios, Modalidades)
 				
-				// MENU ESTUDIANTE
-				Escribir ""
-				Escribir "===== PANEL ESTUDIANTE ====="
-				Escribir "1. Buscar tutor"
-				Escribir "2. Ver horarios"
-				Escribir "3. Salir"
-				Leer opcion
-				
-				Segun opcion Hacer
-					1:
-						Escribir "Mostrando tutores disponibles..."
-					2:
-						Escribir "Mostrando horarios..."
-					3:
-						Escribir "Sesion finalizada"
-				FinSegun
-				
-			SiNo
-				Escribir "ACCESO DENEGADO"
-			FinSi
-			
-		2:
-			Escribir "======== MENU TUTOR ========="
-			Escribir "Ingrese su usuario"
-			Leer info1
-			Escribir "Ingrese su contraseña"
-			Leer info2
-			
-			Si info1 = nombreT Y info2 = contraseñaT Entonces
-				
-				Escribir "ACCESO PERMITIDO"
-				
-				// MENU TUTOR
-				Escribir ""
-				Escribir "===== PANEL TUTOR ====="
-				Escribir "1. Registrar materia"
-				Escribir "2. Registrar horario"
-				Escribir "3. Ver estudiantes"
-				Leer opcion
-				
-				Segun opcion Hacer
-					1:
-						Escribir "Registro de materia"
-					2:
-						Escribir "Registro de horario"
-					3:
-						Escribir "Lista de estudiantes"
-				FinSegun
-				
-			SiNo
-				Escribir "ACCESO DENEGADO"
-			FinSi
-			
-	FinSegun
+		FinSegun
+		
+	Hasta Que decision = 0
+	
+	Escribir "Fin del programa NEXUSPP."
 	
 FinAlgoritmo
+
+
+// ===================== ENTRADA SEGURA (nunca se cae aunque escribas una letra) =====================
+
+Funcion cod <- PedirOpcionRango(mensaje, minOp, maxOp)
+	
+	Definir entrada Como Cadena
+	Definir valido Como Logico
+	Definir i Como Entero
+	
+	Repetir
+		
+		Escribir mensaje
+		Leer entrada
+		
+		valido <- Falso
+		
+		Para i <- minOp Hasta maxOp
+			Si entrada = ConvertirATexto(i) Entonces
+				valido <- Verdadero
+			FinSi
+		FinPara
+		
+		Si valido = Falso Entonces
+			Escribir "Opcion invalida, ingresa un numero entre ", minOp, " y ", maxOp, "."
+		FinSi
+		
+	Hasta Que valido = Verdadero
+	
+	cod <- ConvertirANumero(entrada)
+	
+FinFuncion
+
+
+// ===================== CARGA DE DATOS INICIALES (10 Y 10) =====================
+
+SubProceso CargarDatosIniciales(NomT, MatT, HorT, ModT, CosT, numT Por Referencia, NomE, MatE, HorE, ModE, PreE, numE Por Referencia)
+	
+	// ---------- 10 TUTORES ----------
+	// (los codigos de materia/horario/modalidad usan los catalogos Materias/Horarios/Modalidades)
+	
+	NomT[1] <- "Carlos Mendoza"
+	MatT[1] <- 1
+	HorT[1] <- 2
+	ModT[1] <- 1
+	CosT[1] <- 8
+	
+	NomT[2] <- "Maria Torres"
+	MatT[2] <- 2
+	HorT[2] <- 3
+	ModT[2] <- 2
+	CosT[2] <- 10
+	
+	NomT[3] <- "Jose Ramirez"
+	MatT[3] <- 3
+	HorT[3] <- 6
+	ModT[3] <- 1
+	CosT[3] <- 7
+	
+	NomT[4] <- "Ana Vera"
+	MatT[4] <- 4
+	HorT[4] <- 7
+	ModT[4] <- 1
+	CosT[4] <- 12
+	
+	NomT[5] <- "Luis Castro"
+	MatT[5] <- 5
+	HorT[5] <- 10
+	ModT[5] <- 2
+	CosT[5] <- 6
+	
+	NomT[6] <- "Diana Suarez"
+	MatT[6] <- 1
+	HorT[6] <- 4
+	ModT[6] <- 2
+	CosT[6] <- 9
+	
+	NomT[7] <- "Pedro Flores"
+	MatT[7] <- 4
+	HorT[7] <- 1
+	ModT[7] <- 1
+	CosT[7] <- 15
+	
+	NomT[8] <- "Karla Ochoa"
+	MatT[8] <- 2
+	HorT[8] <- 5
+	ModT[8] <- 1
+	CosT[8] <- 8
+	
+	NomT[9] <- "Andres Leon"
+	MatT[9] <- 3
+	HorT[9] <- 8
+	ModT[9] <- 2
+	CosT[9] <- 11
+	
+	NomT[10] <- "Sofia Rios"
+	MatT[10] <- 5
+	HorT[10] <- 9
+	ModT[10] <- 1
+	CosT[10] <- 5
+	
+	numT <- 10
+	
+	// ---------- 10 ESTUDIANTES ----------
+	
+	NomE[1] <- "Bryan Perez"
+	MatE[1] <- 4
+	HorE[1] <- 1
+	ModE[1] <- 1
+	PreE[1] <- 15
+	
+	NomE[2] <- "Camila Diaz"
+	MatE[2] <- 1
+	HorE[2] <- 2
+	ModE[2] <- 1
+	PreE[2] <- 10
+	
+	NomE[3] <- "Diego Salinas"
+	MatE[3] <- 2
+	HorE[3] <- 3
+	ModE[3] <- 2
+	PreE[3] <- 10
+	
+	NomE[4] <- "Erika Molina"
+	MatE[4] <- 3
+	HorE[4] <- 6
+	ModE[4] <- 1
+	PreE[4] <- 8
+	
+	NomE[5] <- "Franco Ibarra"
+	MatE[5] <- 5
+	HorE[5] <- 10
+	ModE[5] <- 2
+	PreE[5] <- 6
+	
+	NomE[6] <- "Gabriela Nunez"
+	MatE[6] <- 1
+	HorE[6] <- 4
+	ModE[6] <- 2
+	PreE[6] <- 9
+	
+	NomE[7] <- "Hector Paredes"
+	MatE[7] <- 4
+	HorE[7] <- 1
+	ModE[7] <- 1
+	PreE[7] <- 15
+	
+	NomE[8] <- "Ivonne Chavez"
+	MatE[8] <- 2
+	HorE[8] <- 5
+	ModE[8] <- 1
+	PreE[8] <- 8
+	
+	NomE[9] <- "Jonathan Vega"
+	MatE[9] <- 3
+	HorE[9] <- 8
+	ModE[9] <- 2
+	PreE[9] <- 12
+	
+	NomE[10] <- "Karina Espin"
+	MatE[10] <- 5
+	HorE[10] <- 9
+	ModE[10] <- 1
+	PreE[10] <- 7
+	
+	numE <- 10
+	
+	Escribir "Se cargaron 10 tutores y 10 estudiantes de prueba."
+	
+FinSubProceso
+
+
+// ===================== SESION ESTUDIANTE =====================
+
+SubProceso SesionEstudiante(nombreE, contraseñaE, NomE, MatE, HorE, ModE, PreE, numE Por Referencia, NomT, MatT, HorT, ModT, CosT, numT, Materias, Horarios, Modalidades)
+	
+	Definir usuario, clave Como Cadena
+	Definir opcion Como Entero
+	
+	Escribir ""
+	Escribir "======== MENU ESTUDIANTE ========="
+	Escribir "Ingrese su usuario: "
+	Leer usuario
+	Escribir "Ingrese su contraseña: "
+	Leer clave
+	
+	Si usuario = nombreE Y clave = contraseñaE Entonces
+		
+		Escribir "ACCESO PERMITIDO"
+		
+		Repetir
+			
+			Escribir ""
+			Escribir "===== PANEL ESTUDIANTE ====="
+			Escribir "1. Registrarme"
+			Escribir "2. Buscar tutor recomendado"
+			Escribir "3. Ver todos los tutores"
+			Escribir "0. Cerrar sesion"
+			
+			opcion <- PedirOpcionRango("Elige una opcion: ", 0, 3)
+			
+			Segun opcion Hacer
+				
+				1:
+					RegistrarEstudiante(NomE, MatE, HorE, ModE, PreE, numE, Materias, Horarios, Modalidades)
+					
+				2:
+					BuscarTutor(NomT, MatT, HorT, ModT, CosT, numT, NomE, MatE, HorE, ModE, PreE, numE, Materias, Horarios, Modalidades)
+					
+				3:
+					VerTutores(NomT, MatT, HorT, ModT, CosT, numT, Materias, Horarios, Modalidades)
+					
+			FinSegun
+			
+		Hasta Que opcion = 0
+		
+		Escribir "Sesion finalizada."
+		
+	SiNo
+		
+		Escribir "ACCESO DENEGADO"
+		
+	FinSi
+	
+FinSubProceso
+
+
+// ===================== SESION TUTOR =====================
+
+SubProceso SesionTutor(nombreT, contraseñaT, NomT, MatT, HorT, ModT, CosT, numT Por Referencia, NomE, MatE, HorE, ModE, PreE, numE, Materias, Horarios, Modalidades)
+	
+	Definir usuario, clave Como Cadena
+	Definir opcion Como Entero
+	
+	Escribir ""
+	Escribir "======== MENU TUTOR ========="
+	Escribir "Ingrese su usuario: "
+	Leer usuario
+	Escribir "Ingrese su contraseña: "
+	Leer clave
+	
+	Si usuario = nombreT Y clave = contraseñaT Entonces
+		
+		Escribir "ACCESO PERMITIDO"
+		
+		Repetir
+			
+			Escribir ""
+			Escribir "===== PANEL TUTOR ====="
+			Escribir "1. Registrarme"
+			Escribir "2. Ver estudiantes registrados"
+			Escribir "3. Ver todos los tutores"
+			Escribir "0. Cerrar sesion"
+			
+			opcion <- PedirOpcionRango("Elige una opcion: ", 0, 3)
+			
+			Segun opcion Hacer
+				
+				1:
+					RegistrarTutor(NomT, MatT, HorT, ModT, CosT, numT, Materias, Horarios, Modalidades)
+					
+				2:
+					VerEstudiantes(NomE, MatE, HorE, ModE, PreE, numE, Materias, Horarios, Modalidades)
+					
+				3:
+					VerTutores(NomT, MatT, HorT, ModT, CosT, numT, Materias, Horarios, Modalidades)
+					
+			FinSegun
+			
+		Hasta Que opcion = 0
+		
+		Escribir "Sesion finalizada."
+		
+	SiNo
+		
+		Escribir "ACCESO DENEGADO"
+		
+	FinSi
+	
+FinSubProceso
+
+
+// ===================== REGISTRO DE TUTOR (con menus Segun, sin texto libre) =====================
+
+SubProceso RegistrarTutor(NomT, MatT, HorT, ModT, CosT, numT Por Referencia, Materias, Horarios, Modalidades)
+	
+	Definir i Como Entero
+	
+	numT <- numT + 1
+	
+	Escribir "--- Registro de tutor ---"
+	
+	Escribir "Nombre del tutor: "
+	Leer NomT[numT]
+	
+	Escribir "Materias disponibles:"
+	Para i <- 1 Hasta 5
+		Escribir i, ". ", Materias[i]
+	FinPara
+	MatT[numT] <- PedirOpcionRango("Elige la materia en la que te especializas: ", 1, 5)
+	
+	Escribir "Horarios disponibles:"
+	Para i <- 1 Hasta 10
+		Escribir i, ". ", Horarios[i]
+	FinPara
+	HorT[numT] <- PedirOpcionRango("Elige tu horario disponible: ", 1, 10)
+	
+	Escribir "Modalidades disponibles:"
+	Para i <- 1 Hasta 2
+		Escribir i, ". ", Modalidades[i]
+	FinPara
+	ModT[numT] <- PedirOpcionRango("Elige tu modalidad: ", 1, 2)
+	
+	Escribir "Costo por hora: "
+	Leer CosT[numT]
+	
+	Escribir "Tutor registrado con exito."
+	
+FinSubProceso
+
+
+// ===================== REGISTRO DE ESTUDIANTE (con menus Segun, sin texto libre) =====================
+
+SubProceso RegistrarEstudiante(NomE, MatE, HorE, ModE, PreE, numE Por Referencia, Materias, Horarios, Modalidades)
+	
+	Definir i Como Entero
+	
+	numE <- numE + 1
+	
+	Escribir "--- Registro de estudiante ---"
+	
+	Escribir "Nombre del estudiante: "
+	Leer NomE[numE]
+	
+	Escribir "Materias disponibles:"
+	Para i <- 1 Hasta 5
+		Escribir i, ". ", Materias[i]
+	FinPara
+	MatE[numE] <- PedirOpcionRango("Elige la materia que necesitas: ", 1, 5)
+	
+	Escribir "Horarios disponibles:"
+	Para i <- 1 Hasta 10
+		Escribir i, ". ", Horarios[i]
+	FinPara
+	HorE[numE] <- PedirOpcionRango("Elige tu horario disponible: ", 1, 10)
+	
+	Escribir "Modalidades disponibles:"
+	Para i <- 1 Hasta 2
+		Escribir i, ". ", Modalidades[i]
+	FinPara
+	ModE[numE] <- PedirOpcionRango("Elige tu modalidad: ", 1, 2)
+	
+	Escribir "Presupuesto maximo por hora: "
+	Leer PreE[numE]
+	
+	Escribir "Estudiante registrado con exito."
+	
+FinSubProceso
+
+
+// ===================== INDICE DE COMPATIBILIDAD (booleanas + porcentaje) =====================
+
+Funcion punt <- CalcularCompatibilidad(matTutor, horTutor, modTutor, costoTutor, matDeseada, horDeseado, modDeseada, presupuesto)
+	
+	punt <- 0
+	
+	Si matTutor = matDeseada Entonces
+		punt <- punt + 40
+	FinSi
+	
+	Si horTutor = horDeseado Entonces
+		punt <- punt + 30
+	FinSi
+	
+	Si costoTutor <= presupuesto Entonces
+		punt <- punt + 20
+	FinSi
+	
+	Si modTutor = modDeseada Entonces
+		punt <- punt + 10
+	FinSi
+	
+FinFuncion
+
+
+// ===================== BUSCAR TUTOR RECOMENDADO =====================
+
+SubProceso BuscarTutor(NomT, MatT, HorT, ModT, CosT, numT, NomE, MatE, HorE, ModE, PreE, numE, Materias, Horarios, Modalidades)
+	
+	Definir idxE, idxT, i, p, horas Como Entero
+	Definir costoTotal Como Real
+	Definir mejorTutor, mejorPuntaje Como Entero
+	
+	Si numE = 0 Entonces
+		
+		Escribir "No hay estudiantes registrados todavia."
+		
+	SiNo
+		
+		Si numT = 0 Entonces
+			
+			Escribir "No hay tutores registrados todavia."
+			
+		SiNo
+			
+			Escribir "Estudiantes registrados:"
+			Para i <- 1 Hasta numE
+				Escribir i, ". ", NomE[i]
+			FinPara
+			idxE <- PedirOpcionRango("Elige el numero del estudiante: ", 1, numE)
+			
+			Escribir ""
+			Escribir "===== Tutores disponibles para ", NomE[idxE], " ====="
+			
+			mejorTutor <- 0
+			mejorPuntaje <- -1
+			
+			Para i <- 1 Hasta numT
+				
+				p <- CalcularCompatibilidad(MatT[i], HorT[i], ModT[i], CosT[i], MatE[idxE], HorE[idxE], ModE[idxE], PreE[idxE])
+				
+				Escribir i, ". ", NomT[i], " (", Materias[MatT[i]], ", ", Horarios[HorT[i]], ", ", Modalidades[ModT[i]], ") - Compatibilidad: ", p, "%"
+				
+				Si p > mejorPuntaje Entonces
+					mejorPuntaje <- p
+					mejorTutor <- i
+				FinSi
+				
+			FinPara
+			
+			Escribir ""
+			Escribir "El tutor mas recomendado es: ", NomT[mejorTutor], " con ", mejorPuntaje, "% de compatibilidad."
+			
+			Escribir ""
+			idxT <- PedirOpcionRango("Con cual tutor quieres calcular el costo (numero): ", 1, numT)
+			
+			Escribir "Cuantas horas de asesoria deseas? "
+			Leer horas
+			
+			// Operacion algebraica: Costo = Horas x ValorPorHora
+			costoTotal <- horas * CosT[idxT]
+			
+			Escribir ""
+			Escribir "===== Detalle del costo ====="
+			Escribir "Tutor: ", NomT[idxT]
+			Escribir "Horas: ", horas
+			Escribir "Costo por hora: $", CosT[idxT]
+			Escribir "Costo total: $", costoTotal
+			
+		FinSi
+		
+	FinSi
+	
+FinSubProceso
+
+
+// ===================== VER TUTORES =====================
+
+SubProceso VerTutores(NomT, MatT, HorT, ModT, CosT, numT, Materias, Horarios, Modalidades)
+	
+	Definir i Como Entero
+	
+	Escribir ""
+	Escribir "===== LISTA DE TUTORES (", numT, ") ====="
+	
+	Para i <- 1 Hasta numT
+		Escribir i, ". ", NomT[i], " | ", Materias[MatT[i]], " | ", Horarios[HorT[i]], " | ", Modalidades[ModT[i]], " | $", CosT[i], "/hora"
+	FinPara
+	
+FinSubProceso
+
+
+// ===================== VER ESTUDIANTES =====================
+
+SubProceso VerEstudiantes(NomE, MatE, HorE, ModE, PreE, numE, Materias, Horarios, Modalidades)
+	
+	Definir i Como Entero
+	
+	Escribir ""
+	Escribir "===== LISTA DE ESTUDIANTES (", numE, ") ====="
+	
+	Para i <- 1 Hasta numE
+		Escribir i, ". ", NomE[i], " | ", Materias[MatE[i]], " | ", Horarios[HorE[i]], " | ", Modalidades[ModE[i]], " | Presupuesto: $", PreE[i]
+	FinPara
+	
+FinSubProceso
